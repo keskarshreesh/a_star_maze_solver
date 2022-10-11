@@ -22,9 +22,16 @@ const MazeRow = (props) => {
     return (
         <div style={{display : "grid", gridTemplateColumns: "repeat(101,1fr)"}}>
             {mazeRow && mazeRow.map((item,index) => {
-                const current_class = (item === 0) ? "box white" : "box black";
+                const current_class = () => {
+                    switch (item) {
+                        case 'c': return "box white";
+                        case 'w': return "box black";
+                        case 'A': return "box blue";
+                        case 'T': return "box green";
+                    }
+                }
                 return (
-                    <div className={current_class} key={index}/>
+                    <div className={current_class()} key={index}/>
                 )
             })}
         </div>
