@@ -1,0 +1,19 @@
+.box{
+    float:left;
+    height:5px;
+    width:5px;
+    border:1px solid black;
+}
+
+.white{
+    background-color: white;
+}
+.black{
+    background-color:black;
+}
+.blue{
+    background-color:blue;
+}
+.green{
+    background-color:green;
+}
