@@ -79,7 +79,7 @@ class Heap {
 
 
       main(){
-        let minHeap = Heap();
+        let minHeap = new Heap();
         minHeap.insert(200);
         minHeap.insert(100);
         minHeap.insert(50);
