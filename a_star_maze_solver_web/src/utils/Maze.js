@@ -18,3 +18,42 @@ export function generateRandomBinaryMaze(size) {
 
     return maze;
 }
+
+export function cloneEmptyMaze(maze) {
+
+    let emptyMaze = [];
+    for(var i = 0; i < maze.length; i++)
+    {
+        let emptyMazeRow = [];
+        for(var j = 0; j < maze.length; j++)
+        {
+            if(i === 0 && j === 0)
+                emptyMazeRow.push('A');
+            else if(i === maze.length-1 && j === maze.length-1)
+                emptyMazeRow.push('T');
+            else
+                emptyMazeRow.push('c');
+        }
+        emptyMaze.push(emptyMazeRow)
+    }
+
+    return emptyMaze
+}
+
+export function getRandomNeighbour(x,y,size) {
+    
+    let neighbourValid = [true,true,true,true];
+    const neighbourDistances = [[-1,0],[1,0],[0,-1],[0,1]];
+    for(let i = 0; i < 4; i++)
+    {
+        const n_x = x + neighbourDistances[i][0];
+        const n_y = y + neighbourDistances[i][1];
+        if(n_x < 0 || n_x >= size || n_y < 0 || n_y >= size)
+            neighbourValid[i] = false;
+    }
+    let neighbourNum = -1;
+    while(neighbourNum === -1 || !neighbourValid[neighbourNum])
+        neighbourNum = Math.floor(Math.random()*4);
+    
+    return [x + neighbourDistances[neighbourNum][0],y + neighbourDistances[neighbourNum][1]];
+}
