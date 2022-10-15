@@ -54,8 +54,13 @@ export class AStarMinHeap {
     this.heapSize++;
     let currIndex = this.heapSize - 1;
     
-    while(currIndex !== 0 && this.heap[this.heapParentIdx(currIndex)].f > this.heap[currIndex].f)
+    while(currIndex !== 0)
     {
+      if(this.heap[this.heapParentIdx(currIndex)].f < this.heap[currIndex].f)
+        break;
+      else if(this.heap[this.heapParentIdx(currIndex)].f < this.heap[currIndex].f 
+              && this.heap[this.heapParentIdx(currIndex)].path_cost_g > this.heap[currIndex].path_cost_g)
+        break;
       this.swapNodes(this.heapParentIdx(currIndex),currIndex);
       currIndex = this.heapParentIdx(currIndex);
     }
@@ -74,8 +79,13 @@ export class AStarMinHeap {
       foundNode.pathParent = newPathParent;
     }
 
-    while(currIndex !== 0 && this.heap[this.heapParentIdx(currIndex)].f > this.heap[currIndex].f)
+    while(currIndex !== 0)
     {
+      if(this.heap[this.heapParentIdx(currIndex)].f < this.heap[currIndex].f)
+        break;
+      else if(this.heap[this.heapParentIdx(currIndex)].f < this.heap[currIndex].f 
+              && this.heap[this.heapParentIdx(currIndex)].path_cost_g > this.heap[currIndex].path_cost_g)
+        break;
       this.swapNodes(this.heapParentIdx(currIndex),currIndex);
       currIndex = this.heapParentIdx(currIndex);
     }
