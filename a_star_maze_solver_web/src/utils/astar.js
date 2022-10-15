@@ -3,6 +3,7 @@ import { AStarMinHeap, Node, posToString } from "./priority_queue";
 export function getAStarPath(startPos,endPos,grid) {
     
     const endNode = AStar(startPos,endPos,grid);
+    console.log(endNode);
 
     let path = [];
     let currentNode = endNode;
@@ -24,7 +25,12 @@ function AStar(startPos, endPos, grid, row_nums, col_nums){
     const startNode = new Node(startPos,endPos,0,null);
     aStarHeap.insertNode(startNode);
 
+    console.log(aStarHeap.heap);
+    console.log(aStarHeap.openList);
+
     let leastValueNode = null;
+
+    console.log(aStarHeap.size())
 
     while(aStarHeap.size() !== 0){
 
@@ -35,7 +41,10 @@ function AStar(startPos, endPos, grid, row_nums, col_nums){
         
         leastValueNode = aStarHeap.getMinNode();
 
+        console.log(leastValueNode);
+        
         closedListSet.add(posToString(leastValueNode.pos[0],leastValueNode.pos[1]));
+        console.log(closedListSet);
         
         let adjacents = getAdjacents(leastValueNode,grid,closedListSet);
 

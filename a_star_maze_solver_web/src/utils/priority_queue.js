@@ -91,10 +91,13 @@ export class AStarMinHeap {
     if(this.heapSize === 1)
     {
       this.heapSize--;
+      const minNodePos = this.heap[0].pos;
+      this.openList.delete(posToString(minNodePos[0],minNodePos[1]));
       return this.heap[0];
     }
 
     const minNode = this.heap[0];
+    this.openList.delete(posToString(minNode.pos[0],minNode.pos[1]));
     this.heap[0] = this.heap[this.heapSize-1];
     this.heapSize--;
 
@@ -117,10 +120,20 @@ export class AStarMinHeap {
     const rightIdx = this.rightChildIdx(heapIdx);
     let leastIdx = heapIdx;
 
-    if(leftIdx < this.heapSize && this.heap[leftIdx] < this.heap[heapIdx])
-      leastIdx = heapIdx;
-    if(rightIdx < this.heapSize && this.heap[rightIdx] < this.heap[leastIdx])
-      leastIdx = rightIdx;
+    if(leftIdx < this.heapSize)
+    {
+      if(this.heap[leftIdx].f < this.heap[rightIdx].f)
+        leastIdx = leftIdx;
+      else if((this.heap[leftIdx].f === this.heap[rightIdx].f) && (this.heap[leftIdx].path_cost_g > this.heap[rightIdx].path_cost_g))
+        leastIdx = leftIdx;
+    }
+    if(rightIdx < this.heapSize)
+    {
+      if(this.heap[rightIdx].f < this.heap[leastIdx].f)
+        leastIdx = rightIdx;
+      else if((this.heap[rightIdx].f === this.heap[leastIdx].f) && (this.heap[rightIdx].path_cost_g > this.heap[leastIdx].path_cost_g))
+        leastIdx = rightIdx;
+    }
     if(leastIdx !== heapIdx)
     {
       this.swapNodes(this.heap[heapIdx],this.heap[leastIdx]);
