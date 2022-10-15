@@ -2,7 +2,6 @@
 # Credits: https://github.com/OrWestSide/python-scripts/blob/master/maze.py
 
 import random
-import time
 
 maze = []
 wall = 1
