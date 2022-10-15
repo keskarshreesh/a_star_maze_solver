@@ -72,9 +72,6 @@ function AStar(startPos, endPos, grid){
         }
 
         closedListSet.add(posToString(leastValueNode.pos[0],leastValueNode.pos[1]));
-        console.log(aStarHeap.heap);
-        console.log(aStarHeap.openList);
-        console.log(closedListSet);
     }
 
     return endNode;
