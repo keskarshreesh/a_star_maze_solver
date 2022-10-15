@@ -1,8 +1,9 @@
 import './App.css';
 import Maze from './components/Maze';
-import { cloneEmptyMaze, getRandomNeighbour } from './utils/Maze';
+import { cloneEmptyMaze, getMazeForAstarInput, getRandomNeighbour } from './utils/Maze';
 import { useEffect, useState } from 'react';
 import { getMaze } from './services/Maze';
+import { getAStarPath } from './utils/astar';
 
 function App() {
 
@@ -12,16 +13,31 @@ function App() {
   const [playerPosition,setPlayerPosition] = useState([0,0]);
 
   const solveMaze = () => {
+
+    const dest = [maze.length - 1,maze.length - 1];
+
+    const isNodeDest = (x,y) => {
+      return ((x == dest[0]) && (y == dest[1]))
+    } 
+    
+    const currentAStarPath = getAStarPath(playerPosition,dest,getMazeForAstarInput(emptyMaze));
+    
     let prev = playerPosition;
     let current = playerPosition;
     let currentMaze = maze;
     let currentEmptyMaze = emptyMaze;
-    while(currentMaze[current[0]][current[1]] !== 1)
+    
+    let pathIndex = 0;
+    while(pathIndex < currentAStarPath.length)
     {
+      if((currentMaze[current[0]][current[1]] === 1) || (isNodeDest(current[0],current[1])))
+        break;
+      
       currentMaze[prev[0]][prev[1]] = 'A';
       currentEmptyMaze[prev[0]][prev[1]] = 'A';
       prev = current;
-      current = getRandomNeighbour(prev[0],prev[1],currentMaze.length);
+      pathIndex++;
+      current = currentAStarPath[pathIndex];
     }
 
     currentMaze[prev[0]][prev[1]] = 'P';

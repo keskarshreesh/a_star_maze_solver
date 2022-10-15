@@ -59,7 +59,7 @@ export function getRandomNeighbour(x,y,size) {
     return [x + neighbourDistances[neighbourNum][0],y + neighbourDistances[neighbourNum][1]];
 }
 
-export function mazeForAstarInput(maze) {
+export function getMazeForAstarInput(maze) {
 
     let cleanMaze = [];
 
