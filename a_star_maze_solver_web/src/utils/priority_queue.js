@@ -35,6 +35,8 @@ export class AStarMinHeap {
     temp = this.heap[idx1];
     this.heap[idx1] = this.heap[idx2];
     this.heap[idx2] = temp;
+    this.openList.set(posToString(this.heap[idx1].pos[0],this.heap[idx1].pos[1]),idx1);
+    this.openList.set(posToString(this.heap[idx2].pos[0],this.heap[idx2].pos[1]),idx2);
   }
 
   heapParentIdx = (heapIdx) => {
@@ -50,9 +52,11 @@ export class AStarMinHeap {
   }
 
   insertNode = (node) => {
+    
     this.heap.push(node);
     this.heapSize++;
     let currIndex = this.heapSize - 1;
+    this.openList.set(posToString(node.pos[0],node.pos[1]),currIndex);
     
     while(currIndex !== 0)
     {
@@ -61,16 +65,25 @@ export class AStarMinHeap {
       else if(this.heap[this.heapParentIdx(currIndex)].f < this.heap[currIndex].f 
               && this.heap[this.heapParentIdx(currIndex)].path_cost_g > this.heap[currIndex].path_cost_g)
         break;
+      
+      // const parentNode = this.heap[this.heapParentIdx(currIndex)];
       this.swapNodes(this.heapParentIdx(currIndex),currIndex);
+      // this.openList.set(posToString(parentNode.pos[0],parentNode.pos[1]),currIndex);
       currIndex = this.heapParentIdx(currIndex);
+      // this.openList.set(posToString(node.pos[0],node.pos[1]),currIndex);
     }
 
-    this.openList.set(posToString(node.pos[0],node.pos[1]),currIndex);
+    // this.openList.set(posToString(node.pos[0],node.pos[1]),currIndex);
   }
 
   updateNodeIfLessPathCost = (pos,new_path_cost_g,newPathParent,dest) => {
+    // console.log("Updating for node at: ");
+    // console.log(pos);
+    
     let currIndex = this.openList.get(posToString(pos[0],pos[1]));
-
+    // console.log("It's current index in heap is: ");
+    // console.log(currIndex);
+    
     const foundNode = this.heap[currIndex];
     if(new_path_cost_g < foundNode.path_cost_g)
     {
@@ -87,18 +100,25 @@ export class AStarMinHeap {
       else if(this.heap[this.heapParentIdx(currIndex)].f < this.heap[currIndex].f 
               && this.heap[this.heapParentIdx(currIndex)].path_cost_g > this.heap[currIndex].path_cost_g)
         break;
+      // this.swapNodes(this.heapParentIdx(currIndex),currIndex);
+      // currIndex = this.heapParentIdx(currIndex);
+
+      // const parentNode = this.heap[this.heapParentIdx(currIndex)];
+      // const node = this.heap[currIndex];
       this.swapNodes(this.heapParentIdx(currIndex),currIndex);
+      // this.openList.set(posToString(parentNode.pos[0],parentNode.pos[1]),currIndex);
       currIndex = this.heapParentIdx(currIndex);
+      // this.openList.set(posToString(node.pos[0],node.pos[1]),currIndex);
     }
 
-    this.openList.set(posToString(pos[0],pos[1]),currIndex);
+    // this.openList.set(posToString(pos[0],pos[1]),currIndex);
   }
 
   getMinNode = () => {
-    
+
     if(this.heapSize <= 0)
       return null;
-
+    
     if(this.heapSize === 1)
     {
       const minNode = this.heap[0];
@@ -112,6 +132,7 @@ export class AStarMinHeap {
     this.openList.delete(posToString(minNode.pos[0],minNode.pos[1]));
     const newMin = this.heap.pop();
     this.heap[0] = newMin;
+    this.openList.set(posToString(newMin.pos[0],newMin.pos[1]),0);
     this.heapSize--;
 
     this.minHeapifyAStar(0);
@@ -149,7 +170,7 @@ export class AStarMinHeap {
     }
     if(leastIdx !== heapIdx)
     {
-      this.swapNodes(this.heap[heapIdx],this.heap[leastIdx]);
+      this.swapNodes(heapIdx,leastIdx);
       this.minHeapifyAStar(leastIdx);
     }
   }

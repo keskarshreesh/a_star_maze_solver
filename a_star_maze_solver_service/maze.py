@@ -8,7 +8,7 @@ def getMaze():
 	wall = 1
 	cell = 0
 	unvisited = -1
-	dimension = 103
+	dimension = 7
 
 	for _ in range(dimension):
 		line = []

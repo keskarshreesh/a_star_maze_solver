@@ -16,7 +16,7 @@ export function getAStarPath(startPos,endPos,grid) {
     return path;
 }
 
-function AStar(startPos, endPos, grid, row_nums, col_nums){
+function AStar(startPos, endPos, grid){
 
     let aStarHeap = new AStarMinHeap();
 
@@ -26,6 +26,7 @@ function AStar(startPos, endPos, grid, row_nums, col_nums){
     aStarHeap.insertNode(startNode);
 
     let leastValueNode = null;
+    let endNode = null;
 
     while(aStarHeap.size() !== 0){
 
@@ -44,7 +45,22 @@ function AStar(startPos, endPos, grid, row_nums, col_nums){
             let currentAdjacentPos = adjacents[adjacent];
           	
           	if(!closedListSet.has(posToString(currentAdjacentPos[0],currentAdjacentPos[1])))
-          	{   
+          	{
+                if(currentAdjacentPos[0] === endPos[0] && currentAdjacentPos[1] === endPos[1])
+                {
+                    if(!closedListSet.has(posToString(endPos[0],endPos[1])))
+                    {
+                        closedListSet.add(endPos);
+                        endNode = new Node(endPos,endPos,distance,leastValueNode);
+                    }
+                    else if(distance < endNode.path_cost_g)
+                    {
+                        endNode.path_cost_g = distance;
+                        endNode.f = distance;
+                    }
+                    
+                    continue;
+                }  
                 if(!aStarHeap.isNodeInOpenList(currentAdjacentPos))
                 {
                     const currentAdjacentNode = new Node(currentAdjacentPos,endPos,distance,leastValueNode);
@@ -56,12 +72,12 @@ function AStar(startPos, endPos, grid, row_nums, col_nums){
         }
 
         closedListSet.add(posToString(leastValueNode.pos[0],leastValueNode.pos[1]));
+        console.log(aStarHeap.heap);
+        console.log(aStarHeap.openList);
+        console.log(closedListSet);
     }
 
-    if(!aStarHeap.isNodeInOpenList(endPos))
-        return null;
-
-    return aStarHeap.getNodeInOpenList(endPos);
+    return endNode;
 }
 
 function getAdjacents(leastValueNode,grid,closedListSet){

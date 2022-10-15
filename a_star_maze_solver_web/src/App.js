@@ -20,7 +20,7 @@ function App() {
       return ((x === dest[0]) && (y === dest[1]))
     } 
     
-    const currentAStarPath = getAStarPath(playerPosition,dest,getMazeForAstarInput(emptyMaze));
+    const currentAStarPath = getAStarPath(playerPosition,dest,getMazeForAstarInput(emptyMaze)).map(node => node.pos);
     console.log(currentAStarPath);
     let prev = playerPosition;
     let current = playerPosition;
@@ -42,7 +42,7 @@ function App() {
 
     currentMaze[prev[0]][prev[1]] = 'P';
     currentEmptyMaze[prev[0]][prev[1]] = 'P';
-    if(currentMaze[current[0][current[1]]] === 1)
+    if(currentMaze[current[0]][current[1]] === 1)
       currentEmptyMaze[current[0]][current[1]] = 1;
     setPlayerPosition(prev);
     
