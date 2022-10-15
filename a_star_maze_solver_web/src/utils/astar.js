@@ -67,23 +67,23 @@ function AStar(startPos, endPos, grid, row_nums, col_nums){
 function getAdjacents(leastValueNode,grid,closedListSet){
     let neighbours_list = [];
     let row = leastValueNode.pos[0];
-    let column = leastValueNode.pos[1];
+    let col = leastValueNode.pos[1];
 
     if(row!==0){
-        if((grid[row][col] === 0) && (!closedListSet.has(posToString(pos[0],pos[1]))))
-        neighbours_list.push(grid[row-1][column]);
+        if((grid[row][col] === 0) && (!closedListSet.has(posToString(row,col))))
+        neighbours_list.push(grid[row-1][col]);
     }
-    if(column!==0){
-        if((grid[row][col] === 0) && (!closedListSet.has(posToString(pos[0],pos[1]))))
-        neighbours_list.push(grid[row][column-1]);
+    if(col!==0){
+        if((grid[row][col] === 0) && (!closedListSet.has(posToString(row,col))))
+        neighbours_list.push(grid[row][col-1]);
     }
-    if(column !== grid[0].length-1){
-        if((grid[row][col] === 0) && (!closedListSet.has(posToString(pos[0],pos[1]))))
-        neighbours_list.push(grid[row][column+1])
+    if(col !== grid[0].length-1){
+        if((grid[row][col] === 0) && (!closedListSet.has(posToString(row,col))))
+        neighbours_list.push(grid[row][col+1])
     }
     if(row !== grid.length-1){
-        if((grid[row][col] === 0) && (!closedListSet.has(posToString(pos[0],pos[1]))))
-        neighbours_list.push(grid[row+1][column]);
+        if((grid[row][col] === 0) && (!closedListSet.has(posToString(row,col))))
+        neighbours_list.push(grid[row+1][col]);
     }
 
     return neighbours_list;

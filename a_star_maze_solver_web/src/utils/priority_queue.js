@@ -9,7 +9,7 @@ export class Node {
       const h = Math.abs(pos[0] - dest[0]) + Math.abs(pos[1] - dest[1]);
       this.pos = pos;
       this.path_cost_g = g_new;
-      f = g_new + h;
+      this.f = g_new + h;
       this.pathParent = pathParent;        
     }
 }

@@ -17,7 +17,7 @@ function App() {
     const dest = [maze.length - 1,maze.length - 1];
 
     const isNodeDest = (x,y) => {
-      return ((x == dest[0]) && (y == dest[1]))
+      return ((x === dest[0]) && (y === dest[1]))
     } 
     
     const currentAStarPath = getAStarPath(playerPosition,dest,getMazeForAstarInput(emptyMaze));
