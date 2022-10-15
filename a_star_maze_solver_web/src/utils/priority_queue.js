@@ -19,17 +19,17 @@ export const posToString = (row,col) => {
   return row.toString() + ' ' + col.toString();
 }
 
-export const AStarMinHeap = () => {
+export class AStarMinHeap {
   
-  this.heap = [];
-  this.heapSize = 0;
-  this.openList = new Map();
+  heap = [];
+  heapSize = 0;
+  openList = new Map();
 
-  this.size = () => {
+  size = () => {
     return this.heapSize;
   }
 
-  this.swapNodes = (idx1,idx2) => {
+  swapNodes = (idx1,idx2) => {
 
     let temp;
     temp = this.heap[idx1];
@@ -37,19 +37,19 @@ export const AStarMinHeap = () => {
     this.heap[idx2] = temp;
   }
 
-  this.heapParentIdx = (heapIdx) => {
+  heapParentIdx = (heapIdx) => {
     return (heapIdx-1)/2;
   }
 
-  this.leftChildIdx = (heapIdx) => {
+  leftChildIdx = (heapIdx) => {
     return (2*heapIdx + 1);
   }
 
-  this.rightChildIdx = (heapIdx) => {
+  rightChildIdx = (heapIdx) => {
     return (2*heapIdx + 2);
   }
 
-  this.insertNode = (node) => {
+  insertNode = (node) => {
     this.heap.push(node);
     this.heapSize++;
     let currIndex = this.heapSize - 1;
@@ -63,7 +63,7 @@ export const AStarMinHeap = () => {
     this.openList.set(posToString(node.pos[0],node.pos[1]),currIndex);
   }
 
-  this.updateNodeIfLessPathCost = (pos,new_path_cost_g,newPathParent,dest) => {
+  updateNodeIfLessPathCost = (pos,new_path_cost_g,newPathParent,dest) => {
     let currIndex = this.heap[this.openList.get(posToString(pos[0],pos[1]))];
     const foundNode = this.heap[currIndex];
     if(new_path_cost_g < foundNode.path_cost_g)
@@ -83,7 +83,7 @@ export const AStarMinHeap = () => {
     this.openList.set(posToString(pos[0],pos[1]),currIndex);
   }
 
-  this.getMinNode = () => {
+  getMinNode = () => {
     
     if(this.heapSize <= 0)
       return null;
@@ -103,15 +103,15 @@ export const AStarMinHeap = () => {
     return minNode;
   }
 
-  this.isNodeInOpenList = (pos) => {
+  isNodeInOpenList = (pos) => {
     return this.openList.has(posToString(pos[0],pos[1]));
   }
 
-  this.getNodeInOpenList = (pos) => {
+  getNodeInOpenList = (pos) => {
     return this.openList.get(posToString(pos[0],pos[1]));
   }
 
-  this.minHeapifyAStar = (heapIdx) => {
+  minHeapifyAStar = (heapIdx) => {
     
     const leftIdx = this.leftChildIdx(heapIdx);
     const rightIdx = this.rightChildIdx(heapIdx);

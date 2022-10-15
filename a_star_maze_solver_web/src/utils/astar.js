@@ -17,12 +17,12 @@ export function getAStarPath(startPos,endPos,grid) {
 
 function AStar(startPos, endPos, grid, row_nums, col_nums){
 
-    let aStarHeap = AStarMinHeap();
+    let aStarHeap = new AStarMinHeap();
 
     let closedListSet = new Set();
 
     const startNode = new Node(startPos,endPos,0,null);
-    aStarHeap.insert(startNode);
+    aStarHeap.insertNode(startNode);
 
     let leastValueNode = null;
 
@@ -35,12 +35,13 @@ function AStar(startPos, endPos, grid, row_nums, col_nums){
         
         leastValueNode = aStarHeap.getMinNode();
 
-        closedListSet.add(leastValueNode);
+        closedListSet.add(posToString(leastValueNode.pos[0],leastValueNode.pos[1]));
         
-        let adjacents = getAdjacents(leastValueNode,grid);
+        let adjacents = getAdjacents(leastValueNode,grid,closedListSet);
 
         for(let adjacent = 0; adjacent < adjacents.length; adjacent++){
-            let distance = leastValueNode.path_cost_g+1;
+            
+            let distance = leastValueNode.path_cost_g + 1;
             let currentAdjacentPos = adjacents[adjacent];
           	
           	if(!closedListSet.has(posToString(currentAdjacentPos)))
@@ -48,7 +49,7 @@ function AStar(startPos, endPos, grid, row_nums, col_nums){
           			if(!aStarHeap.isNodeInOpenList(currentAdjacentPos))
                     {
                         const currentAdjacentNode = new Node(currentAdjacentPos,endPos,distance,leastValueNode);
-                        aStarHeap.insert(currentAdjacentNode);
+                        aStarHeap.insertNode(currentAdjacentNode);
                     }
                     else
                         aStarHeap.updateNodeIfLessPathCost(currentAdjacentPos,distance,leastValueNode,endPos);
