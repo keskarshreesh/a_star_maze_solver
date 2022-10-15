@@ -18,8 +18,8 @@ function App() {
     let currentEmptyMaze = emptyMaze;
     while(currentMaze[current[0]][current[1]] !== 1)
     {
-      currentMaze[prev[0]][prev[1]] = 0;
-      currentEmptyMaze[prev[0]][prev[1]] = 0;
+      currentMaze[prev[0]][prev[1]] = 'A';
+      currentEmptyMaze[prev[0]][prev[1]] = 'A';
       prev = current;
       current = getRandomNeighbour(prev[0],prev[1],currentMaze.length);
     }
