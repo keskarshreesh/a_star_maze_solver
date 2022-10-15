@@ -38,7 +38,7 @@ export class AStarMinHeap {
   }
 
   heapParentIdx = (heapIdx) => {
-    return (heapIdx-1)/2;
+    return Math.floor((heapIdx-1)/2);
   }
 
   leftChildIdx = (heapIdx) => {
@@ -69,7 +69,8 @@ export class AStarMinHeap {
   }
 
   updateNodeIfLessPathCost = (pos,new_path_cost_g,newPathParent,dest) => {
-    let currIndex = this.heap[this.openList.get(posToString(pos[0],pos[1]))];
+    let currIndex = this.openList.get(posToString(pos[0],pos[1]));
+
     const foundNode = this.heap[currIndex];
     if(new_path_cost_g < foundNode.path_cost_g)
     {
@@ -100,15 +101,17 @@ export class AStarMinHeap {
 
     if(this.heapSize === 1)
     {
+      const minNode = this.heap[0];
+      this.heap.shift();
       this.heapSize--;
-      const minNodePos = this.heap[0].pos;
-      this.openList.delete(posToString(minNodePos[0],minNodePos[1]));
-      return this.heap[0];
+      this.openList.delete(posToString(minNode.pos[0],minNode.pos[1]));
+      return minNode;
     }
 
     const minNode = this.heap[0];
     this.openList.delete(posToString(minNode.pos[0],minNode.pos[1]));
-    this.heap[0] = this.heap[this.heapSize-1];
+    const newMin = this.heap.pop();
+    this.heap[0] = newMin;
     this.heapSize--;
 
     this.minHeapifyAStar(0);
@@ -125,16 +128,16 @@ export class AStarMinHeap {
   }
 
   minHeapifyAStar = (heapIdx) => {
-    
+
     const leftIdx = this.leftChildIdx(heapIdx);
     const rightIdx = this.rightChildIdx(heapIdx);
     let leastIdx = heapIdx;
 
     if(leftIdx < this.heapSize)
     {
-      if(this.heap[leftIdx].f < this.heap[rightIdx].f)
+      if(this.heap[leftIdx].f < this.heap[heapIdx].f)
         leastIdx = leftIdx;
-      else if((this.heap[leftIdx].f === this.heap[rightIdx].f) && (this.heap[leftIdx].path_cost_g > this.heap[rightIdx].path_cost_g))
+      else if((this.heap[leftIdx].f === this.heap[heapIdx].f) && (this.heap[leftIdx].path_cost_g > this.heap[heapIdx].path_cost_g))
         leastIdx = leftIdx;
     }
     if(rightIdx < this.heapSize)

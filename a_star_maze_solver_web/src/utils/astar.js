@@ -25,26 +25,16 @@ function AStar(startPos, endPos, grid, row_nums, col_nums){
     const startNode = new Node(startPos,endPos,0,null);
     aStarHeap.insertNode(startNode);
 
-    console.log(aStarHeap.heap);
-    console.log(aStarHeap.openList);
-
     let leastValueNode = null;
-
-    console.log(aStarHeap.size())
 
     while(aStarHeap.size() !== 0){
 
         if(leastValueNode != null
             && aStarHeap.isNodeInOpenList(endPos)
-            && (leastValueNode.path_cost_g > aStarHeap.heap[aStarHeap.openList.getNodeInOpenList(endPos)].path_cost_g))
+            && (leastValueNode.path_cost_g > aStarHeap.heap[aStarHeap.getNodeInOpenList(endPos)].path_cost_g))
             break;
         
         leastValueNode = aStarHeap.getMinNode();
-
-        console.log(leastValueNode);
-        
-        closedListSet.add(posToString(leastValueNode.pos[0],leastValueNode.pos[1]));
-        console.log(closedListSet);
         
         let adjacents = getAdjacents(leastValueNode,grid,closedListSet);
 
@@ -53,19 +43,19 @@ function AStar(startPos, endPos, grid, row_nums, col_nums){
             let distance = leastValueNode.path_cost_g + 1;
             let currentAdjacentPos = adjacents[adjacent];
           	
-          	if(!closedListSet.has(posToString(currentAdjacentPos)))
-          	{       
-          			if(!aStarHeap.isNodeInOpenList(currentAdjacentPos))
-                    {
-                        const currentAdjacentNode = new Node(currentAdjacentPos,endPos,distance,leastValueNode);
-                        aStarHeap.insertNode(currentAdjacentNode);
-                    }
-                    else
-                        aStarHeap.updateNodeIfLessPathCost(currentAdjacentPos,distance,leastValueNode,endPos);
+          	if(!closedListSet.has(posToString(currentAdjacentPos[0],currentAdjacentPos[1])))
+          	{   
+                if(!aStarHeap.isNodeInOpenList(currentAdjacentPos))
+                {
+                    const currentAdjacentNode = new Node(currentAdjacentPos,endPos,distance,leastValueNode);
+                    aStarHeap.insertNode(currentAdjacentNode);
+                }
+                else
+                    aStarHeap.updateNodeIfLessPathCost(currentAdjacentPos,distance,leastValueNode,endPos);
             }
-          	
         }
 
+        closedListSet.add(posToString(leastValueNode.pos[0],leastValueNode.pos[1]));
     }
 
     if(!aStarHeap.isNodeInOpenList(endPos))
@@ -81,19 +71,19 @@ function getAdjacents(leastValueNode,grid,closedListSet){
 
     if(row!==0){
         if((grid[row][col] === 0) && (!closedListSet.has(posToString(row,col))))
-        neighbours_list.push(grid[row-1][col]);
+        neighbours_list.push([row-1,col]);
     }
     if(col!==0){
         if((grid[row][col] === 0) && (!closedListSet.has(posToString(row,col))))
-        neighbours_list.push(grid[row][col-1]);
+        neighbours_list.push([row,col-1]);
     }
     if(col !== grid[0].length-1){
         if((grid[row][col] === 0) && (!closedListSet.has(posToString(row,col))))
-        neighbours_list.push(grid[row][col+1])
+        neighbours_list.push([row,col+1])
     }
     if(row !== grid.length-1){
         if((grid[row][col] === 0) && (!closedListSet.has(posToString(row,col))))
-        neighbours_list.push(grid[row+1][col]);
+        neighbours_list.push([row+1,col]);
     }
 
     return neighbours_list;
