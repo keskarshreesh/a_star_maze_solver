@@ -160,22 +160,21 @@ while (walls):
 			if (s_cells < 2):
 				maze[rand_wall[0]][rand_wall[1]] = 0
 
-					# Mark the new walls
-					if (rand_wall[1] != width-1):
-						if (maze[rand_wall[0]][rand_wall[1]+1] != 'c'):
-							maze[rand_wall[0]][rand_wall[1]+1] = 'w'
-						if ([rand_wall[0], rand_wall[1]+1] not in walls):
-							walls.append([rand_wall[0], rand_wall[1]+1])
-					if (rand_wall[0] != height-1):
-						if (maze[rand_wall[0]+1][rand_wall[1]] != 'c'):
-							maze[rand_wall[0]+1][rand_wall[1]] = 'w'
-						if ([rand_wall[0]+1, rand_wall[1]] not in walls):
-							walls.append([rand_wall[0]+1, rand_wall[1]])
-					if (rand_wall[0] != 0):	
-						if (maze[rand_wall[0]-1][rand_wall[1]] != 'c'):
-							maze[rand_wall[0]-1][rand_wall[1]] = 'w'
-						if ([rand_wall[0]-1, rand_wall[1]] not in walls):
-							walls.append([rand_wall[0]-1, rand_wall[1]])
+				if (rand_wall[0] != dimension-1):
+					if (maze[rand_wall[0]+1][rand_wall[1]] != 0):
+						maze[rand_wall[0]+1][rand_wall[1]] = 1
+					if ([rand_wall[0]+1, rand_wall[1]] not in walls):
+						walls.append([rand_wall[0]+1, rand_wall[1]])
+				if (rand_wall[1] != 0):
+					if (maze[rand_wall[0]][rand_wall[1]-1] != 0):
+						maze[rand_wall[0]][rand_wall[1]-1] = 1
+					if ([rand_wall[0], rand_wall[1]-1] not in walls):
+						walls.append([rand_wall[0], rand_wall[1]-1])
+				if (rand_wall[1] != dimension-1):
+					if (maze[rand_wall[0]][rand_wall[1]+1] != 0):
+						maze[rand_wall[0]][rand_wall[1]+1] = 1
+					if ([rand_wall[0], rand_wall[1]+1] not in walls):
+						walls.append([rand_wall[0], rand_wall[1]+1])
 
 			for wall in walls:
 				if (wall[0] == rand_wall[0] and wall[1] == rand_wall[1]):
@@ -220,4 +219,4 @@ for i in range(len(maze)):
 		elif maze[i][j]==1:
 			k += 1
 
-# print(maze)
+print(maze)
