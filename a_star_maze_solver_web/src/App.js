@@ -9,19 +9,26 @@ function App() {
   const [maze,setMaze] = useState([]);
   const [emptyMaze,setEmptyMaze] = useState([]);
   const [startSolver,setStartSolver] = useState(false);
+  const [playerPosition,setPlayerPosition] = useState([0,0]);
 
   const solveMaze = () => {
-    let current = [0,0];
+    let prev = playerPosition;
+    let current = playerPosition;
     let currentMaze = maze;
     let currentEmptyMaze = emptyMaze;
-    while(currentMaze[current[0]][current[1]] != 'w')
+    while(currentMaze[current[0]][current[1]] !== 1)
     {
-      currentMaze[current[0]][current[1]] = 'A';
-      currentEmptyMaze[current[0]][current[1]] = 'A';
-      current = getRandomNeighbour(current[0],current[1],currentMaze.length);
+      currentMaze[prev[0]][prev[1]] = 0;
+      currentEmptyMaze[prev[0]][prev[1]] = 0;
+      prev = current;
+      current = getRandomNeighbour(prev[0],prev[1],currentMaze.length);
     }
 
-    currentEmptyMaze[current[0]][current[1]] = 'w';
+    currentMaze[prev[0]][prev[1]] = 'P';
+    currentEmptyMaze[prev[0]][prev[1]] = 'P';
+    currentEmptyMaze[current[0]][current[1]] = 1;
+    setPlayerPosition(prev);
+    
     setMaze(currentMaze);
     setEmptyMaze(currentEmptyMaze);
     setStartSolver(false);

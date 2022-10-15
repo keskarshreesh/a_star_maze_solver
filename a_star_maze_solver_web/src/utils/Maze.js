@@ -11,7 +11,7 @@ export function generateRandomBinaryMaze(size) {
             else if(i === size-1 && j === size-1)
                 mazeRow.push('T');
             else
-                mazeRow.push(Math.round(Math.random()) === 0 ? 'c' : 'w');
+                mazeRow.push(Math.round(Math.random()) === 0 ? 0 : 1);
         }
         maze.push(mazeRow);
     }
@@ -32,7 +32,7 @@ export function cloneEmptyMaze(maze) {
             else if(i === maze.length-1 && j === maze.length-1)
                 emptyMazeRow.push('T');
             else
-                emptyMazeRow.push('c');
+                emptyMazeRow.push(0);
         }
         emptyMaze.push(emptyMazeRow)
     }
@@ -51,9 +51,30 @@ export function getRandomNeighbour(x,y,size) {
         if(n_x < 0 || n_x >= size || n_y < 0 || n_y >= size)
             neighbourValid[i] = false;
     }
+
     let neighbourNum = -1;
     while(neighbourNum === -1 || !neighbourValid[neighbourNum])
         neighbourNum = Math.floor(Math.random()*4);
     
     return [x + neighbourDistances[neighbourNum][0],y + neighbourDistances[neighbourNum][1]];
+}
+
+export function mazeForAstarInput(maze) {
+
+    let cleanMaze = [];
+
+    for(let i = 0; i < maze.length; i++)
+    {
+        let cleanMazeRow = [];
+        for(let j = 0; j < maze.length; j++)
+        {
+            if(maze[i][j] === 0 || maze[i][j] === 'T' || maze[i][j] === 'A' || maze[i][j] === 'P')
+                cleanMazeRow.push(0);
+            else if(maze[i][j] === 1)
+                cleanMazeRow.push(1);
+        }
+        cleanMaze.push(cleanMazeRow);
+    }
+
+    return cleanMaze;
 }

@@ -19,17 +19,17 @@ const MazeRow = (props) => {
 
     const {mazeRow} = props;
 
-    // const playerContextValues = useContext(playerContext);
-
     return (
         <div style={{display : "grid", gridTemplateColumns: "repeat(101,2fr)"}}>
             {mazeRow && mazeRow.map((item,index) => {
                 const current_class = () => {
                     switch (item) {
-                        case 'c': return "box white";
-                        case 'w': return "box black";
+                        case 0: return "box white";
+                        case 1: return "box black";
                         case 'T': return "box green";
                         case 'A': return "box red";
+                        case 'P': return "box blue";
+                        default: return "box white";
                     }
                 }
                 return (
