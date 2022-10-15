@@ -40,11 +40,21 @@ function App() {
       current = currentAStarPath[pathIndex];
     }
 
-    currentMaze[prev[0]][prev[1]] = 'P';
-    currentEmptyMaze[prev[0]][prev[1]] = 'P';
     if(currentMaze[current[0]][current[1]] === 1)
+    {
       currentEmptyMaze[current[0]][current[1]] = 1;
-    setPlayerPosition(prev);
+      currentMaze[prev[0]][prev[1]] = 'P';
+      currentEmptyMaze[prev[0]][prev[1]] = 'P';
+      setPlayerPosition(prev);
+    }
+    else if(isNodeDest(current[0],current[1]))
+    {
+      currentMaze[prev[0]][prev[1]] = 'A';
+      currentEmptyMaze[prev[0]][prev[1]] = 'A';
+      currentMaze[current[0]][current[1]] = 'P';
+      currentEmptyMaze[current[0]][current[1]] = 'P';
+      setPlayerPosition(current);
+    }
     
     setMaze(currentMaze);
     setEmptyMaze(currentEmptyMaze);
