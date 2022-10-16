@@ -32,7 +32,7 @@ function AStar(startPos, endPos, grid, gmax){
 
         if(leastValueNode != null
             && aStarHeap.isNodeInOpenList(endPos)
-            && (leastValueNode.path_cost_g > aStarHeap.heap[aStarHeap.getNodeInOpenList(endPos)].path_cost_g))
+            && (leastValueNode.f > aStarHeap.heap[aStarHeap.getNodeInOpenList(endPos)].path_cost_g))
             break;
         
         leastValueNode = aStarHeap.getMinNode();
