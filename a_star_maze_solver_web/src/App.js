@@ -11,6 +11,20 @@ function App() {
   const [emptyMaze,setEmptyMaze] = useState([]);
   const [startSolver,setStartSolver] = useState(false);
   const [playerPosition,setPlayerPosition] = useState([0,0]);
+  const [timer,setTimer] = useState(0);
+  const [gmax,setGmax] = useState(true);
+
+  const resetMaze = () => {
+
+    setPlayerPosition([0,0]);
+    setEmptyMaze(cloneEmptyMaze(maze));
+    setTimer(0);
+    setStartSolver(false);
+    const newMaze = getMazeForAstarInput(maze);
+    newMaze[0][0] = 'A';
+    newMaze[maze.length-1][maze.length-1] = 'T';
+    setMaze(newMaze);
+  }
 
   const solveMaze = () => {
 
@@ -20,7 +34,7 @@ function App() {
       return ((x === dest[0]) && (y === dest[1]))
     } 
     
-    const currentAStarPath = getAStarPath(playerPosition,dest,getMazeForAstarInput(emptyMaze)).map(node => node.pos);
+    const currentAStarPath = getAStarPath(playerPosition,dest,getMazeForAstarInput(emptyMaze),gmax).map(node => node.pos);
     console.log(currentAStarPath);
     let prev = playerPosition;
     let current = playerPosition;
@@ -63,8 +77,15 @@ function App() {
 
   useEffect(() => {
     if(startSolver)
+    {
+      const startTime = Date.now();
       solveMaze();
+      const endTime = Date.now();
+      setTimer(prevState => (prevState + endTime - startTime));
+    }
   },[startSolver])
+
+  useEffect(() => console.log("Total time till now in ms: " + timer.toString()),[timer]);
 
   useEffect(() => {
     getMaze()
@@ -82,7 +103,21 @@ function App() {
         <Maze maze={emptyMaze}/>
       </div>
       <div>
-        <button onClick={() => setStartSolver(true)}>Start solver</button>
+        <button onClick={() => {
+          setGmax(true)
+          setStartSolver(true)
+        }}>Start solver</button>
+      </div>
+      <div>
+        <button onClick={() => {
+            setGmax(false)
+            setStartSolver(true)
+          }}>Start Gmin solver</button>
+      </div>
+      <div>
+        <button onClick={() => {
+            resetMaze();
+          }}>Reset Maze</button>
       </div>
     </>
   );

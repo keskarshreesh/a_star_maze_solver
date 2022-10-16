@@ -1,8 +1,8 @@
-import { AStarMinHeap, Node, posToString } from "./priority_queue";
+import { AStarMinHeap, AStarMinHeapGmin, Node, posToString } from "./priority_queue";
 
-export function getAStarPath(startPos,endPos,grid) {
+export function getAStarPath(startPos,endPos,grid,gmax) {
     
-    const endNode = AStar(startPos,endPos,grid);
+    const endNode = AStar(startPos,endPos,grid,gmax);
     console.log(endNode);
 
     let path = [];
@@ -16,9 +16,9 @@ export function getAStarPath(startPos,endPos,grid) {
     return path;
 }
 
-function AStar(startPos, endPos, grid){
+function AStar(startPos, endPos, grid, gmax){
 
-    let aStarHeap = new AStarMinHeap();
+    let aStarHeap = gmax ? new AStarMinHeap() : new AStarMinHeapGmin();
 
     let closedListSet = new Set();
 
