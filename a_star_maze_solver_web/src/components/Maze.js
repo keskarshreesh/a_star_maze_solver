@@ -6,7 +6,7 @@ const Maze = (props) => {
     const {maze} = props;
 
     return (
-        <div style={{display : "grid", gridTemplateRows: "repeat(101,1fr)", height: '202px', width: '202px'}}>
+        <div style={{display : "grid", gridTemplateRows: "repeat(101,2fr)", height: '707px', width: '202px', marginTop: '15px', marginLeft: '15px'}}>
             {maze && maze.map((item,index) => (
                 <MazeRow mazeRow={item} key={index}/>
             ))}
@@ -20,14 +20,16 @@ const MazeRow = (props) => {
     const {mazeRow} = props;
 
     return (
-        <div style={{display : "grid", gridTemplateColumns: "repeat(101,1fr)"}}>
+        <div style={{display : "grid", gridTemplateColumns: "repeat(101,2fr)"}}>
             {mazeRow && mazeRow.map((item,index) => {
                 const current_class = () => {
                     switch (item) {
-                        case 'c': return "box white";
-                        case 'w': return "box black";
-                        case 'A': return "box blue";
+                        case 0: return "box white";
+                        case 1: return "box black";
                         case 'T': return "box green";
+                        case 'A': return "box red";
+                        case 'P': return "box blue";
+                        default: return "box white";
                     }
                 }
                 return (
