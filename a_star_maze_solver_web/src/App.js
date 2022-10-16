@@ -35,7 +35,7 @@ function App() {
     } 
     
     const currentAStarPath = getAStarPath(playerPosition,dest,getMazeForAstarInput(emptyMaze),gmax).map(node => node.pos);
-    console.log(currentAStarPath);
+    // console.log(currentAStarPath);
     let prev = playerPosition;
     let current = playerPosition;
     let currentMaze = maze;
