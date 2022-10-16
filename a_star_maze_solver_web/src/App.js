@@ -13,6 +13,7 @@ function App() {
   const [playerPosition,setPlayerPosition] = useState([0,0]);
   const [timer,setTimer] = useState(0);
   const [gmax,setGmax] = useState(true);
+  const [forward,setForward] = useState(true);
 
   const resetMaze = () => {
 
@@ -34,8 +35,14 @@ function App() {
       return ((x === dest[0]) && (y === dest[1]))
     } 
     
-    const currentAStarPath = getAStarPath(playerPosition,dest,getMazeForAstarInput(emptyMaze),gmax).map(node => node.pos);
-    // console.log(currentAStarPath);
+    let currentAStarPath;
+    if(forward)
+      currentAStarPath = getAStarPath(playerPosition,dest,getMazeForAstarInput(emptyMaze),gmax).map(node => node.pos);
+    else
+    {
+      currentAStarPath = getAStarPath(dest,playerPosition,getMazeForAstarInput(emptyMaze),gmax).map(node => node.pos);
+      currentAStarPath = currentAStarPath.reverse();
+    }
     let prev = playerPosition;
     let current = playerPosition;
     let currentMaze = maze;
@@ -118,6 +125,13 @@ function App() {
         <button onClick={() => {
             resetMaze();
           }}>Reset Maze</button>
+      </div>
+      <div>
+        <button onClick={() => {
+          setGmax(true)
+          setForward(false)
+          setStartSolver(true)
+        }}>Start Backward solver</button>
       </div>
     </>
   );
