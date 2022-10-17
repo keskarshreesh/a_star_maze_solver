@@ -65,11 +65,32 @@ function App() {
     let currentMaze = maze;
     let currentEmptyMaze = emptyMaze;
     
+    const updateCurrentSurroundings = (pos) => {
+
+      const x = [-1,1,0,0];
+      const y = [0,0,-1,1];
+
+      let neighbourX, neighbourY;
+      for(let i = 0; i < 4; i++)
+      {
+        neighbourX = pos[0] + x[i];
+        neighbourY = pos[1] + y[i];
+
+        if((neighbourX < 0) || (neighbourX >= maze.length - 1) || (neighbourY < 0) || (neighbourY >= maze.length - 1))
+          continue;
+        
+        if(maze[neighbourX][neighbourY] === 1)
+          currentEmptyMaze[neighbourX][neighbourY] = 1;
+      }
+    }
+
     let pathIndex = 0;
     while(pathIndex < currentAStarPath.length)
     {
       if((currentMaze[current[0]][current[1]] === 1) || (isNodeDest(current[0],current[1])))
         break;
+
+      updateCurrentSurroundings(currentAStarPath[pathIndex]);
       
       currentMaze[prev[0]][prev[1]] = 'A';
       currentEmptyMaze[prev[0]][prev[1]] = 'A';
