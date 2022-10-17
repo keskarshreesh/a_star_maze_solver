@@ -1,9 +1,8 @@
-import { AStarMinHeap, AStarMinHeapGmin, Node, posToString } from "./priority_queue";
+import { AStarMinHeap, Node, posToString } from "./priority_queue";
 
 export function getAStarPath(startPos,endPos,grid,gmax) {
     
     const endNode = AStar(startPos,endPos,grid,gmax);
-    // console.log(endNode);
 
     let path = [];
     let currentNode = endNode;

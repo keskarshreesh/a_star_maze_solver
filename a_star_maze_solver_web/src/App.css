@@ -64,3 +64,14 @@
               inset 2px 2px 3px rgba(0, 0, 0, .6);
 }
 
+.button-selected {
+  background-color: green;
+  color: white;
+  margin: 2px;
+}
+
+.button-unselected {
+  background-color: blue;
+  color: white;
+  margin: 2px;
+}

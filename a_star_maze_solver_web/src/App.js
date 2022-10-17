@@ -14,6 +14,7 @@ function App() {
   const [timer,setTimer] = useState(0);
   const [gmax,setGmax] = useState(true);
   const [forward,setForward] = useState(true);
+  const [adaptiveHeuristicGrid,setAdaptiveHeuristicGrid] = useState([]);
 
   const resetMaze = () => {
 
@@ -109,29 +110,27 @@ function App() {
         <Maze maze={maze}/>
         <Maze maze={emptyMaze}/>
       </div>
-      <div>
-        <button onClick={() => {
-          setGmax(true)
-          setStartSolver(true)
-        }}>Start solver</button>
+      <div style={{display: 'flex', justifyContent: 'center'}}>
+        <div>
+          <button className={gmax ? 'button-selected' : 'button-unselected'} onClick={() => setGmax(true)}>Gmax</button>
+        </div>
+        <div>
+          <button className={gmax ? 'button-unselected' : 'button-selected'} onClick={() => setGmax(false)}>Gmin</button>
+        </div>
+        <div>
+          <button className={forward ? 'button-selected' : 'button-unselected'} onClick={() => setForward(true)}>Forward AStar</button>
+        </div>
+        <div>
+          <button className={forward ? 'button-unselected' : 'button-selected'} onClick={() => setForward(false)}>Backward AStar</button>
+        </div>
       </div>
-      <div>
-        <button onClick={() => {
-            setGmax(false)
-            setStartSolver(true)
-          }}>Start Gmin solver</button>
-      </div>
-      <div>
-        <button onClick={() => {
-            resetMaze();
-          }}>Reset Maze</button>
-      </div>
-      <div>
-        <button onClick={() => {
-          setGmax(true)
-          setForward(false)
-          setStartSolver(true)
-        }}>Start Backward solver</button>
+      <div style={{display: 'flex', justifyContent: 'center'}}>
+        <div>
+          <button style={{margin: 2}} onClick={() => setStartSolver(true)}>Start solver</button>
+        </div>
+        <div>
+          <button style={{margin: 2}} onClick={() => resetMaze()}>Reset Maze</button>
+        </div>
       </div>
     </>
   );
