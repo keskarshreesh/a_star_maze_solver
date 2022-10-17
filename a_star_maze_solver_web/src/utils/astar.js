@@ -15,7 +15,7 @@ export function getAStarPath(startPos,endPos,grid,gmax,getHeuristic) {
     return path;
 }
 
-function AStar(startPos, endPos, grid, gmax,getHeuristic){
+function AStar(startPos, endPos, grid, gmax, getHeuristic){
 
     let aStarHeap = new AStarMinHeap(gmax,getHeuristic);
 
