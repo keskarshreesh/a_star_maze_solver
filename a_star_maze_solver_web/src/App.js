@@ -105,11 +105,15 @@ function App() {
       {
         const currentAdaptiveHeuristicGrid = adaptiveHeuristicGrid;
         const endNode = currentAStarPathNodes[currentAStarPathNodes.length-1];
-        for(let i = 0; i < maze.length; i++)
-        {
-          const aStarPathNode = currentAStarPathNodes[i];
+        // for(let i = 0; i < maze.length; i++)
+        // {
+        //   const aStarPathNode = currentAStarPathNodes[i];
+        //   currentAdaptiveHeuristicGrid[aStarPathNode.pos[0]][aStarPathNode.pos[1]] = Math.abs(endNode.path_cost_g - aStarPathNode.path_cost_g);
+        // }
+
+        currentAStarPathNodes.forEach(aStarPathNode => {
           currentAdaptiveHeuristicGrid[aStarPathNode.pos[0]][aStarPathNode.pos[1]] = Math.abs(endNode.path_cost_g - aStarPathNode.path_cost_g);
-        }
+        })
 
         setAdaptiveHeuristicGrid(currentAdaptiveHeuristicGrid);
       }

@@ -36,7 +36,7 @@ function AStar(startPos, endPos, grid, gmax, getHeuristic){
         
         leastValueNode = aStarHeap.getMinNode();
         
-        let adjacents = getAdjacents(leastValueNode,grid,closedListSet);
+        let adjacents = getNeighbours(leastValueNode,grid,closedListSet);
 
         for(let adjacent = 0; adjacent < adjacents.length; adjacent++){
             
@@ -76,7 +76,7 @@ function AStar(startPos, endPos, grid, gmax, getHeuristic){
     return endNode;
 }
 
-function getAdjacents(leastValueNode,grid,closedListSet){
+function getNeighbours(leastValueNode,grid,closedListSet){
     let neighbours_list = [];
     let row = leastValueNode.pos[0];
     let col = leastValueNode.pos[1];
