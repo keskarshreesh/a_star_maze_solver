@@ -9,7 +9,8 @@ function App() {
 
   const [maze,setMaze] = useState([]);
   const [emptyMaze,setEmptyMaze] = useState([]);
-  const [startSolver,setStartSolver] = useState(false);
+  const [startedSolver,setStartedSolver] = useState(false);
+  const [continueSolver,setContinueSolver] = useState(false);
   const [playerPosition,setPlayerPosition] = useState([0,0]);
   const [timer,setTimer] = useState(0);
   const [gmax,setGmax] = useState(true);
@@ -23,7 +24,8 @@ function App() {
     setEmptyMaze(cloneEmptyMaze(maze));
     setAdaptiveHeuristicGrid(initializeAdaptiveHeuristicGrid(maze.length));
     setTimer(0);
-    setStartSolver(false);
+    setStartedSolver(false);
+    setContinueSolver(false);
     const newMaze = getMazeForAstarInput(maze);
     newMaze[0][0] = 'A';
     newMaze[maze.length-1][maze.length-1] = 'T';
@@ -102,22 +104,32 @@ function App() {
       currentMaze[current[0]][current[1]] = 'P';
       currentEmptyMaze[current[0]][current[1]] = 'P';
       setPlayerPosition(current);
+      setStartedSolver(false);
     }
     
     setMaze(currentMaze);
     setEmptyMaze(currentEmptyMaze);
-    setStartSolver(false);
+    setContinueSolver(false);
   }
 
   useEffect(() => {
-    if(startSolver)
+    if(startedSolver && continueSolver)
     {
-      const startTime = Date.now();
-      solveMaze();
-      const endTime = Date.now();
-      setTimer(prevState => (prevState + endTime - startTime));
+      setTimeout(() => {
+        const startTime = Date.now();
+        solveMaze();
+        const endTime = Date.now();
+        setTimer(prevState => (prevState + endTime - startTime));
+      },500)
     }
-  },[startSolver])
+    else if(startedSolver && (!continueSolver) && (!((playerPosition[0] === maze.length - 1) && (playerPosition[1] === maze.length - 1))))
+      setContinueSolver(true);
+  },[continueSolver])
+
+  useEffect(() => {
+    if(startedSolver)
+      setContinueSolver(true);
+  },[startedSolver])
 
   useEffect(() => console.log("Total time till now in ms: " + timer.toString()),[timer]);
 
@@ -159,7 +171,7 @@ function App() {
       </div>
       <div style={{display: 'flex', justifyContent: 'center'}}>
         <div>
-          <button style={{margin: 2}} onClick={() => setStartSolver(true)}>Start solver</button>
+          <button style={{margin: 2}} onClick={() => setStartedSolver(true)}>Start solver</button>
         </div>
         <div>
           <button style={{margin: 2}} onClick={() => resetMaze()}>Reset Maze</button>
