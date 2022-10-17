@@ -18,7 +18,7 @@ export function getAStarPath(startPos,endPos,grid,gmax) {
 
 function AStar(startPos, endPos, grid, gmax){
 
-    let aStarHeap = gmax ? new AStarMinHeap() : new AStarMinHeapGmin();
+    let aStarHeap = new AStarMinHeap(gmax);
 
     let closedListSet = new Set();
 
