@@ -32,10 +32,6 @@ export class AStarMinHeap {
     this.getHeuristic = getHeuristic;
   }
 
-  // AStarMinHeap(gmax) {
-  //   this.gmax = gmax;
-  // }
-
   tieBreaker = (pathCost1,pathCost2) => {
     return this.gmax ? (pathCost1 > pathCost2) : (pathCost1 < pathCost2);
   }
