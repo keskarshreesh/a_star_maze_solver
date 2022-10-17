@@ -1,6 +1,6 @@
 import './App.css';
 import Maze from './components/Maze';
-import { cloneEmptyMaze, getMazeForAstarInput, getRandomNeighbour } from './utils/Maze';
+import { cloneEmptyMaze, getMazeForAstarInput, initializeAdaptiveHeuristicGrid } from './utils/Maze';
 import { useEffect, useState } from 'react';
 import { getMaze } from './services/Maze';
 import { getAStarPath } from './utils/astar';
@@ -14,19 +14,28 @@ function App() {
   const [timer,setTimer] = useState(0);
   const [gmax,setGmax] = useState(true);
   const [forward,setForward] = useState(true);
+  const [adaptive,setAdaptive] = useState(false);
   const [adaptiveHeuristicGrid,setAdaptiveHeuristicGrid] = useState([]);
 
   const resetMaze = () => {
 
     setPlayerPosition([0,0]);
     setEmptyMaze(cloneEmptyMaze(maze));
+    setAdaptiveHeuristicGrid(initializeAdaptiveHeuristicGrid(maze.length));
     setTimer(0);
     setStartSolver(false);
     const newMaze = getMazeForAstarInput(maze);
     newMaze[0][0] = 'A';
     newMaze[maze.length-1][maze.length-1] = 'T';
+    setGmax(true);
+    setForward(true);
+    setAdaptive(false);
     setMaze(newMaze);
   }
+
+  const getHeuristicRepeated = (pos,dest) => (Math.abs(pos[0] - dest[0]) + Math.abs(pos[1] - dest[1]));
+
+  const getHeuristicAdaptive = (pos,dest) => adaptiveHeuristicGrid[pos[0]][pos[1]];
 
   const solveMaze = () => {
 
@@ -34,16 +43,21 @@ function App() {
 
     const isNodeDest = (x,y) => {
       return ((x === dest[0]) && (y === dest[1]))
-    } 
+    }
+
+    const getHeuristicCurrent = adaptive ? getHeuristicAdaptive : getHeuristicRepeated;
     
-    let currentAStarPath;
+    let currentAStarPathNodes;
     if(forward)
-      currentAStarPath = getAStarPath(playerPosition,dest,getMazeForAstarInput(emptyMaze),gmax).map(node => node.pos);
+      currentAStarPathNodes = getAStarPath(playerPosition,dest,getMazeForAstarInput(emptyMaze),gmax,getHeuristicCurrent);
     else
     {
-      currentAStarPath = getAStarPath(dest,playerPosition,getMazeForAstarInput(emptyMaze),gmax).map(node => node.pos);
-      currentAStarPath = currentAStarPath.reverse();
+      currentAStarPathNodes = getAStarPath(dest,playerPosition,getMazeForAstarInput(emptyMaze),gmax,getHeuristicCurrent);
+      currentAStarPathNodes = currentAStarPathNodes.reverse();
     }
+
+    const currentAStarPath = currentAStarPathNodes.map(node => node.pos);
+
     let prev = playerPosition;
     let current = playerPosition;
     let currentMaze = maze;
@@ -64,6 +78,18 @@ function App() {
 
     if(currentMaze[current[0]][current[1]] === 1)
     {
+      if(adaptive && (maze.length > 0))
+      {
+        const currentAdaptiveHeuristicGrid = adaptiveHeuristicGrid;
+        const endNode = currentAStarPathNodes[currentAStarPathNodes.length-1];
+        for(let i = 0; i < pathIndex; i++)
+        {
+          const aStarPathNode = currentAStarPathNodes[i];
+          currentAdaptiveHeuristicGrid[aStarPathNode.pos[0]][aStarPathNode.pos[1]] = endNode.path_cost_g - aStarPathNode.path_cost_g;
+        }
+
+        setAdaptiveHeuristicGrid(currentAdaptiveHeuristicGrid);
+      }
       currentEmptyMaze[current[0]][current[1]] = 1;
       currentMaze[prev[0]][prev[1]] = 'P';
       currentEmptyMaze[prev[0]][prev[1]] = 'P';
@@ -100,6 +126,7 @@ function App() {
     .then(response => {
       setMaze(response.data.maze);
       setEmptyMaze(cloneEmptyMaze(response.data.maze));
+      setAdaptiveHeuristicGrid(initializeAdaptiveHeuristicGrid(response.data.maze.length));
     })
     .catch(error => console.log(error));
   },[])
@@ -122,6 +149,12 @@ function App() {
         </div>
         <div>
           <button className={forward ? 'button-unselected' : 'button-selected'} onClick={() => setForward(false)}>Backward AStar</button>
+        </div>
+        <div>
+          <button className={adaptive ? 'button-selected' : 'button-unselected'} onClick={() => setAdaptive(true)}>Adaptive AStar</button>
+        </div>
+        <div>
+          <button className={adaptive ? 'button-unselected' : 'button-selected'} onClick={() => setAdaptive(false)}>Repeated AStar</button>
         </div>
       </div>
       <div style={{display: 'flex', justifyContent: 'center'}}>

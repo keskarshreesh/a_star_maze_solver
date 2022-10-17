@@ -5,12 +5,12 @@ export class Node {
     f = 20210;
     pathParent = null
 
-    constructor(pos,dest,g_new,pathParent) {
-      const h = Math.abs(pos[0] - dest[0]) + Math.abs(pos[1] - dest[1]);
+    constructor(pos,dest,g_new,pathParent,getHeuristic) {
+      const h = getHeuristic(pos,dest);
       this.pos = pos;
       this.path_cost_g = g_new;
       this.f = g_new + h;
-      this.pathParent = pathParent;        
+      this.pathParent = pathParent;
     }
 }
 
@@ -25,10 +25,16 @@ export class AStarMinHeap {
   heapSize = 0;
   openList = new Map();
   gmax = true;
+  getHeuristic = (pos,dest) => (Math.abs(pos[0] - dest[0]) + Math.abs(pos[1] - dest[1]));
 
-  AStarMinHeap(gmax) {
+  AStarMinHeap(gmax,getHeuristic) {
     this.gmax = gmax;
+    this.getHeuristic = getHeuristic;
   }
+
+  // AStarMinHeap(gmax) {
+  //   this.gmax = gmax;
+  // }
 
   tieBreaker = (pathCost1,pathCost2) => {
     return this.gmax ? (pathCost1 > pathCost2) : (pathCost1 < pathCost2);
@@ -88,7 +94,7 @@ export class AStarMinHeap {
     if(new_path_cost_g < foundNode.path_cost_g)
     {
       foundNode.path_cost_g = new_path_cost_g;
-      const h = Math.abs(pos[0] - dest[0]) + Math.abs(pos[1] - dest[1]);
+      const h = this.getHeuristic(pos,dest);
       foundNode.f = foundNode.path_cost_g + h;
       foundNode.pathParent = newPathParent;
     }
