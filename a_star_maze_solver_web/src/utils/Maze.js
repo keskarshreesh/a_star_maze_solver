@@ -78,3 +78,21 @@ export function getMazeForAstarInput(maze) {
 
     return cleanMaze;
 }
+
+export function initializeAdaptiveHeuristicGrid(mazeSize) {
+
+    const adaptiveHeuristicGrid = [];
+    
+    const dest = [mazeSize-1,mazeSize-1];
+
+    for(let i = 0; i < mazeSize; i++)
+    {
+        let gridRow = [];
+        for(let j = 0; j < mazeSize; j++)
+            gridRow.push((Math.abs(i - dest[0]) + (Math.abs(j - dest[1]))));
+        
+        adaptiveHeuristicGrid.push(gridRow);
+    }
+
+    return adaptiveHeuristicGrid;
+}

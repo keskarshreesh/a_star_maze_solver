@@ -1,28 +1,27 @@
-import { AStarMinHeap, AStarMinHeapGmin, Node, posToString } from "./priority_queue";
+import { AStarMinHeap, Node, posToString } from "./priority_queue";
 
-export function getAStarPath(startPos,endPos,grid,gmax) {
+export function getAStarPath(startPos,endPos,grid,gmax,getHeuristic) {
     
-    const endNode = AStar(startPos,endPos,grid,gmax);
-    // console.log(endNode);
+    const endNode = AStar(startPos,endPos,grid,gmax,getHeuristic);
 
     let path = [];
     let currentNode = endNode;
 
     while (currentNode != null) {
-    	path.unshift (currentNode);
+    	path.unshift(currentNode);
     	currentNode = currentNode.pathParent;
     }
     
     return path;
 }
 
-function AStar(startPos, endPos, grid, gmax){
+function AStar(startPos, endPos, grid, gmax,getHeuristic){
 
-    let aStarHeap = gmax ? new AStarMinHeap() : new AStarMinHeapGmin();
+    let aStarHeap = new AStarMinHeap(gmax,getHeuristic);
 
     let closedListSet = new Set();
 
-    const startNode = new Node(startPos,endPos,0,null);
+    const startNode = new Node(startPos,endPos,0,null,getHeuristic);
     aStarHeap.insertNode(startNode);
 
     let leastValueNode = null;
@@ -51,7 +50,7 @@ function AStar(startPos, endPos, grid, gmax){
                     if(!closedListSet.has(posToString(endPos[0],endPos[1])))
                     {
                         closedListSet.add(endPos);
-                        endNode = new Node(endPos,endPos,distance,leastValueNode);
+                        endNode = new Node(endPos,endPos,distance,leastValueNode,getHeuristic);
                     }
                     else if(distance < endNode.path_cost_g)
                     {
@@ -63,7 +62,7 @@ function AStar(startPos, endPos, grid, gmax){
                 }  
                 if(!aStarHeap.isNodeInOpenList(currentAdjacentPos))
                 {
-                    const currentAdjacentNode = new Node(currentAdjacentPos,endPos,distance,leastValueNode);
+                    const currentAdjacentNode = new Node(currentAdjacentPos,endPos,distance,leastValueNode,getHeuristic);
                     aStarHeap.insertNode(currentAdjacentNode);
                 }
                 else
