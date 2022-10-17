@@ -58,6 +58,18 @@ function App() {
       currentAStarPathNodes = currentAStarPathNodes.reverse();
     }
 
+    if(adaptive && (maze.length > 0))
+    {
+      const currentAdaptiveHeuristicGrid = adaptiveHeuristicGrid;
+      const endNode = currentAStarPathNodes[currentAStarPathNodes.length-1];
+
+      currentAStarPathNodes.forEach(aStarPathNode => {
+        currentAdaptiveHeuristicGrid[aStarPathNode.pos[0]][aStarPathNode.pos[1]] = Math.abs(endNode.path_cost_g - aStarPathNode.path_cost_g);
+      })
+
+      setAdaptiveHeuristicGrid(currentAdaptiveHeuristicGrid);
+    }
+
     const currentAStarPath = currentAStarPathNodes.map(node => node.pos);
 
     let prev = playerPosition;
@@ -101,22 +113,6 @@ function App() {
 
     if(currentMaze[current[0]][current[1]] === 1)
     {
-      if(adaptive && (maze.length > 0))
-      {
-        const currentAdaptiveHeuristicGrid = adaptiveHeuristicGrid;
-        const endNode = currentAStarPathNodes[currentAStarPathNodes.length-1];
-        // for(let i = 0; i < maze.length; i++)
-        // {
-        //   const aStarPathNode = currentAStarPathNodes[i];
-        //   currentAdaptiveHeuristicGrid[aStarPathNode.pos[0]][aStarPathNode.pos[1]] = Math.abs(endNode.path_cost_g - aStarPathNode.path_cost_g);
-        // }
-
-        currentAStarPathNodes.forEach(aStarPathNode => {
-          currentAdaptiveHeuristicGrid[aStarPathNode.pos[0]][aStarPathNode.pos[1]] = Math.abs(endNode.path_cost_g - aStarPathNode.path_cost_g);
-        })
-
-        setAdaptiveHeuristicGrid(currentAdaptiveHeuristicGrid);
-      }
       currentEmptyMaze[current[0]][current[1]] = 1;
       currentMaze[prev[0]][prev[1]] = 'P';
       currentEmptyMaze[prev[0]][prev[1]] = 'P';
