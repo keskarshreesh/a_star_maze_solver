@@ -28,7 +28,7 @@ const MazeRow = (props) => {
                         case 1: return "box black";
                         case 'T': return "box green";
                         case 'A': return "box red";
-                        case 'P': return "box blue";
+                        case 'P': return "box cyan";
                         default: return "box white";
                     }
                 }
